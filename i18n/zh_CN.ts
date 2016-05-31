@@ -20,7 +20,7 @@
     </message>
     <message>
         <location filename="main.py" line="53"/>
-        <source>Decrease one Tomato</source>
+        <source>Decrease a Pomodoro</source>
         <translation>减少一个番茄</translation>
     </message>
     <message>

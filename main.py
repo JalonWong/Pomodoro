@@ -48,7 +48,7 @@ class MainWindow(QWidget):
         self.buttonMenu.addAction(self.tr('Work')).triggered.connect(self.setWorkStatus)
         self.buttonMenu.addAction(self.tr('Break')).triggered.connect(self.setBreakStatus)
         self.buttonMenu.addAction(self.tr('Long Break')).triggered.connect(self.setLoneBreakStatus)
-        self.buttonMenu.addAction(self.tr('Decrease one Tomato')).triggered.connect(self.decreaseOneTomato)
+        self.buttonMenu.addAction(self.tr('Decrease a Pomodoro')).triggered.connect(self.decreaseOneTomato)
         self.buttonMenu.addSeparator()
         self.buttonMenu.addAction(self.tr('Exit')).triggered.connect(self.close)
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Tomato</string>
+   <string>Pomodoro</string>
   </property>
   <property name="windowIcon">
    <iconset>
