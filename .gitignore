@@ -1,4 +1,4 @@
 .idea/
 __pycache__/
-*.pyw
-i18n/*.qm
+Source/*.pyw
+Source/i18n/*.qm

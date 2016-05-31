@@ -1,0 +1,1 @@
+pylupdate5 main.py -ts i18n/zh_CN.ts
