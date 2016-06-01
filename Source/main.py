@@ -22,12 +22,14 @@ class MainWindow(QWidget):
     def __init__(self):
         super(self.__class__, self).__init__()
         # Data Init
-        self.workTime = 25 * 60
-        self.shortTime = 5 * 60
-        self.longTime = 15 * 60
-        # self.workTime = 3
-        # self.shortTime = 3
-        # self.longTime = 3
+        if 1:
+            self.workTime = 25 * 60
+            self.shortTime = 5 * 60
+            self.longTime = 15 * 60
+        else:
+            self.workTime = 3
+            self.shortTime = 3
+            self.longTime = 3
         self.longBreakTomatoNumber = 4
 
         self.status = ''
@@ -77,8 +79,8 @@ class MainWindow(QWidget):
 
     def buildTray(self):
         self.trayIcon = QSystemTrayIcon(self)
-        self.trayIcon.setIcon(QIcon('resource/tomato.ico'))
-        self.trayIcon.setToolTip('Tomato')
+        self.trayIcon.setIcon(QIcon('Resource/tomato.ico'))
+        self.trayIcon.setToolTip('Pomodoro')
         self.trayIcon.activated.connect(self.onTrayActivated)
         self.trayIcon.show()
 
@@ -169,24 +171,26 @@ class MainWindow(QWidget):
         if state == 'Run':
             self.buttonMain.setText(self.tr('Reset'))
 
-            if self.timer:
-                self.timer.stop()
-                self.timer.wait()
             self.timer = ThreadTimer(full_time=self.nextTime)
             self.timer.timeout.connect(self.timeout)
             self.timer.start()
-            return
-        elif state == 'ReadyToWork':
-            self.workView(self.tr('Work'))
-            self.nextTime = self.workTime
-        elif state == 'ReadyToShortBreak':
-            self.breakView(self.tr('Break'))
-            self.nextTime = self.shortTime
-        elif state == 'ReadyToLoneBreak':
-            self.breakView(self.tr('Long Break'))
-            self.nextTime = self.longTime
+        else:
+            if self.timer:
+                self.timer.stop()
+                self.timer.wait()
+                self.timer = None
+            
+            if state == 'ReadyToWork':
+                self.workView(self.tr('Work'))
+                self.nextTime = self.workTime
+            elif state == 'ReadyToShortBreak':
+                self.breakView(self.tr('Break'))
+                self.nextTime = self.shortTime
+            elif state == 'ReadyToLoneBreak':
+                self.breakView(self.tr('Long Break'))
+                self.nextTime = self.longTime
 
-        self.viewTime(self.nextTime)
+            self.viewTime(self.nextTime)
 
     def setWorkStatus(self):
         self.setStatus('ReadyToWork')
@@ -217,9 +221,9 @@ class ThreadTimer(QThread):
             if view_time <= 0:
                 self.timeout.emit()
                 break
-            if view_time != last_time:
+            if int(view_time) != last_time:
                 mainWindow.viewTime(view_time)
-                last_time = view_time
+                last_time = int(view_time)
 
     def stop(self):
         self.isRun = False
