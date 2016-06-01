@@ -6,7 +6,7 @@ import time
 from PyQt5 import uic, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QCursor, QIcon
-from PyQt5.QtCore import QLocale, QTranslator
+from PyQt5.QtCore import QLocale, QTranslator, QThread
 import ctypes
 
 if platform.system() == 'Windows':
@@ -19,8 +19,6 @@ qtUIFile = "main.ui"
 
 
 class MainWindow(QWidget):
-    closed = QtCore.pyqtSignal()
-
     def __init__(self):
         super(self.__class__, self).__init__()
         # Data Init
@@ -71,7 +69,7 @@ class MainWindow(QWidget):
             super().closeEvent(QCloseEvent)
             if self.timer:
                 self.timer.stop()
-                self.timer.join()
+                self.timer.wait()
             print('exit')
         else:
             QCloseEvent.ignore()
@@ -148,7 +146,7 @@ class MainWindow(QWidget):
 
     def timeout(self):
         print('timeout')
-        self.timer = None
+        self.showWindow()
         if self.lastStatue != 'ReadyToWork':
             self.setStatus('ReadyToWork')
         else:
@@ -158,8 +156,6 @@ class MainWindow(QWidget):
                 self.setStatus('ReadyToLoneBreak')
             else:
                 self.setStatus('ReadyToShortBreak')
-
-        self.showWindow()
 
     def decreaseOneTomato(self):
         if self.tomatoCount > 0:
@@ -172,32 +168,22 @@ class MainWindow(QWidget):
         self.status = state
         if state == 'Run':
             self.buttonMain.setText(self.tr('Reset'))
-            self.timer = ThreadTimer(full_time=self.nextTime, timeoutCallBack=self.timeout)
+
+            if self.timer:
+                self.timer.stop()
+                self.timer.wait()
+            self.timer = ThreadTimer(full_time=self.nextTime)
+            self.timer.timeout.connect(self.timeout)
             self.timer.start()
             return
         elif state == 'ReadyToWork':
             self.workView(self.tr('Work'))
-            if self.timer:
-                self.timer.stop()
-                self.timer.join()
-                self.timer = None
-
             self.nextTime = self.workTime
         elif state == 'ReadyToShortBreak':
             self.breakView(self.tr('Break'))
-            if self.timer:
-                self.timer.stop()
-                self.timer.join()
-                self.timer = None
-
             self.nextTime = self.shortTime
         elif state == 'ReadyToLoneBreak':
             self.breakView(self.tr('Long Break'))
-            if self.timer:
-                self.timer.stop()
-                self.timer.join()
-                self.timer = None
-
             self.nextTime = self.longTime
 
         self.viewTime(self.nextTime)
@@ -212,13 +198,13 @@ class MainWindow(QWidget):
         self.setStatus('ReadyToLoneBreak')
 
 
-class ThreadTimer(threading.Thread):
-    def __init__(self, group=None, target=None, name=None, args=(), kwargs=None, *, daemon=None, full_time,
-                 timeoutCallBack):
-        super().__init__(group, target, name, args, kwargs, daemon=daemon)
+class ThreadTimer(QThread):
+    timeout = QtCore.pyqtSignal()
+
+    def __init__(self, full_time, QObject_parent=None):
+        super().__init__(QObject_parent)
         self.isRun = True
         self.fullTime = full_time
-        self.timeoutCallBack = timeoutCallBack
 
     def run(self):
         start_time = time.perf_counter()
@@ -229,7 +215,7 @@ class ThreadTimer(threading.Thread):
             current_time = time.perf_counter()
             view_time = self.fullTime - (current_time - start_time)
             if view_time <= 0:
-                self.timeoutCallBack()
+                self.timeout.emit()
                 break
             if view_time != last_time:
                 mainWindow.viewTime(view_time)
