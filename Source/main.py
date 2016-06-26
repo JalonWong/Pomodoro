@@ -1,19 +1,20 @@
 # coding=utf-8
 import sys
 import platform
-import threading
 import time
+import ctypes
+from MyConfig import *
 from PyQt5 import uic, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QCursor, QIcon
-from PyQt5.QtCore import QLocale, QTranslator, QThread
-import ctypes
+from PyQt5.QtCore import QTranslator, QThread
 
 if platform.system() == 'Windows':
-    myAppId = 'jalon.tomato'  # arbitrary string
+    myAppId = 'jalon.pomodoro'  # Arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myAppId)
 
 mainWindow = None
+configData = None
 
 qtUIFile = "main.ui"
 
@@ -21,17 +22,6 @@ qtUIFile = "main.ui"
 class MainWindow(QWidget):
     def __init__(self):
         super(self.__class__, self).__init__()
-        # Data Init
-        if 1:
-            self.workTime = 25 * 60
-            self.shortTime = 5 * 60
-            self.longTime = 15 * 60
-        else:
-            self.workTime = 3
-            self.shortTime = 3
-            self.longTime = 3
-        self.longBreakTomatoNumber = 4
-
         self.status = ''
         self.lastStatue = ''
         self.timer = None
@@ -42,6 +32,7 @@ class MainWindow(QWidget):
         uic.loadUi(qtUIFile, self)
         self.trayIcon = None
         self.closeEnable = False
+        self.setWindowTitle(self.tr('Pomodoro'))
         self.title = self.windowTitle()
 
         self.buttonMenu = QMenu()
@@ -154,7 +145,7 @@ class MainWindow(QWidget):
         else:
             self.tomatoCount += 1
             self.setCompleteTomato(self.tomatoCount)
-            if self.tomatoCount % self.longBreakTomatoNumber == 0:
+            if self.tomatoCount % configData.longBreakPomodoroNumber == 0:
                 self.setStatus('ReadyToLoneBreak')
             else:
                 self.setStatus('ReadyToShortBreak')
@@ -179,16 +170,16 @@ class MainWindow(QWidget):
                 self.timer.stop()
                 self.timer.wait()
                 self.timer = None
-            
+
             if state == 'ReadyToWork':
                 self.workView(self.tr('Work'))
-                self.nextTime = self.workTime
+                self.nextTime = configData.workTime
             elif state == 'ReadyToShortBreak':
                 self.breakView(self.tr('Break'))
-                self.nextTime = self.shortTime
+                self.nextTime = configData.shortTime
             elif state == 'ReadyToLoneBreak':
                 self.breakView(self.tr('Long Break'))
-                self.nextTime = self.longTime
+                self.nextTime = configData.longTime
 
             self.viewTime(self.nextTime)
 
@@ -229,18 +220,30 @@ class ThreadTimer(QThread):
         self.isRun = False
 
 
+def SetLanguage(app, lang):
+    print('Language: ' + lang)
+    trans = QTranslator()
+    trans.load('i18n/' + lang + '.qm')
+    if not app.installTranslator(trans):
+        print('Failed to load translator file!')
+
+
 def main():
     global mainWindow
+    global configData
 
     app = QApplication(sys.argv)
 
-    # 加载中文
-    # lang = QLocale.system().name()
-    # print('Language: '+lang)
-    # trans = QTranslator()
-    # trans.load('i18n/'+lang+'.qm')
-    # if not app.installTranslator(trans):
-    #     print('Failed to load translator file!')
+    configData = ConfigData()
+
+    # Language
+    print('Language: ' + configData.lang)
+    trans = QTranslator()
+    trans.load('i18n/'+configData.lang+'.qm')
+    if not app.installTranslator(trans):
+        print('Failed to load translator file!')
+
+    # SetLanguage(app, configData.lang)
 
     mainWindow = MainWindow()
     mainWindow.setStatus('ReadyToWork')
