@@ -14,9 +14,9 @@ class ConfigData(object):
         self.lang = QLocale.system().name()
         self.lang = self.getValue('DEFAULT', 'Language', self.lang)
 
-        self.workTime = int(self.getValue('DEFAULT', 'WorkTime', '25')) * 60
-        self.shortTime = int(self.getValue('DEFAULT', 'BreakTime', '5')) * 60
-        self.longTime = int(self.getValue('DEFAULT', 'LongBreakTime', '15')) * 60
+        self.workTime = int(float(self.getValue('DEFAULT', 'WorkTime', '25')) * 60)
+        self.shortTime = int(float(self.getValue('DEFAULT', 'BreakTime', '5')) * 60)
+        self.longTime = int(float(self.getValue('DEFAULT', 'LongBreakTime', '15')) * 60)
         self.longBreakPomodoroNumber = int(self.getValue('DEFAULT', 'PomodoroForLongBreak', '4'))
 
         file = open(filename, 'w')
