@@ -7,7 +7,7 @@ from MyConfig import *
 from PyQt5 import uic, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QCursor, QIcon
-from PyQt5.QtCore import QTranslator, QThread
+from PyQt5.QtCore import QTranslator, QThread, QFileInfo
 
 if platform.system() == 'Windows':
     myAppId = 'jalon.pomodoro'  # Arbitrary string
@@ -17,6 +17,7 @@ mainWindow = None
 configData = None
 
 qtUIFile = "main.ui"
+AppIcon = None
 
 
 class MainWindow(QWidget):
@@ -70,7 +71,7 @@ class MainWindow(QWidget):
 
     def buildTray(self):
         self.trayIcon = QSystemTrayIcon(self)
-        self.trayIcon.setIcon(QIcon('Resource/tomato.ico'))
+        self.trayIcon.setIcon(AppIcon)
         self.trayIcon.setToolTip('Pomodoro')
         self.trayIcon.activated.connect(self.onTrayActivated)
         self.trayIcon.show()
@@ -231,8 +232,16 @@ def SetLanguage(app, lang):
 def main():
     global mainWindow
     global configData
+    global AppIcon
 
     app = QApplication(sys.argv)
+
+    filename = sys.argv[0]
+    if filename.split('.')[1] == 'exe':
+        iconF = QFileIconProvider()
+        AppIcon = iconF.icon(QFileInfo(filename))
+    else:
+        AppIcon = QIcon('Resource/tomato.ico')
 
     configData = ConfigData()
 
