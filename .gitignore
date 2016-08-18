@@ -3,3 +3,5 @@ __pycache__/
 Source/*.pyw
 Source/i18n/*.qm
 Source/*.ini
+Source/build/
+Source/dist/
