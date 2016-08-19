@@ -8,6 +8,7 @@ from PyQt5 import uic, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QCursor, QIcon
 from PyQt5.QtCore import QTranslator, QThread, QFileInfo
+from ui_main import *
 
 if platform.system() == 'Windows':
     myAppId = 'jalon.pomodoro'  # Arbitrary string
@@ -18,9 +19,10 @@ configData = None
 
 qtUIFile = "main.ui"
 AppIcon = None
+EXE_Flag = False
 
 
-class MainWindow(QWidget):
+class MainWindow(QWidget, Ui_Form):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.status = ''
@@ -30,7 +32,13 @@ class MainWindow(QWidget):
         self.nextTime = 0
 
         # Object Init
-        uic.loadUi(qtUIFile, self)
+        global EXE_Flag
+
+        if EXE_Flag:
+            self.setupUi(self)
+        else:
+            uic.loadUi(qtUIFile, self)
+
         self.setWindowIcon(AppIcon)
         self.trayIcon = None
         self.closeEnable = False
@@ -234,6 +242,7 @@ def main():
     global mainWindow
     global configData
     global AppIcon
+    global EXE_Flag
 
     app = QApplication(sys.argv)
 
@@ -241,6 +250,7 @@ def main():
     if filename.split('.')[1] == 'exe':
         iconF = QFileIconProvider()
         AppIcon = iconF.icon(QFileInfo(filename))
+        EXE_Flag = True
     else:
         AppIcon = QIcon('Resource/tomato.ico')
 
