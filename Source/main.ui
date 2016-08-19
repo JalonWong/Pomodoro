@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>Pomodoro</string>
   </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>resource/tomato.ico</normaloff>resource/tomato.ico</iconset>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">

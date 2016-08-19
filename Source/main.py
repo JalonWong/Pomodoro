@@ -31,6 +31,7 @@ class MainWindow(QWidget):
 
         # Object Init
         uic.loadUi(qtUIFile, self)
+        self.setWindowIcon(AppIcon)
         self.trayIcon = None
         self.closeEnable = False
         self.setWindowTitle(self.tr('Pomodoro'))
