@@ -1,10 +1,6 @@
 # -*- mode: python -*-
 
 block_cipher = None
-added_files = [
-         ( 'main.ui', '.' ),
-         ( 'i18n/*.qm','i18n' )
-     ]
 
 a = Analysis(['main.py'],
              pathex=['D:\\work\\Projects\\Python\\Pomodoro\\Source'],
