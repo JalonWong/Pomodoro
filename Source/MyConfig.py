@@ -23,8 +23,8 @@ class ConfigData(object):
         self.config.write(file)
         file.close()
 
-        for key in self.config['DEFAULT']:
-            print(key)
+        # for key in self.config['DEFAULT']:
+        #     print(key)
 
     def getValue(self, section, key, default_value):
         s = self.config[section]
