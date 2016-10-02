@@ -14,12 +14,12 @@ if platform.system() == 'Windows':
     myAppId = 'jalon.pomodoro'  # Arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myAppId)
 
-configData = None
+Config = None
 AppIcon = None
 EXE_Flag = False
 
 
-class Main(MainWindow):
+class MainCtrl(MainWindow):
     Run = 0
     ReadyToWork = 1
     ReadyToShortBreak = 2
@@ -62,7 +62,7 @@ class Main(MainWindow):
         else:
             self.tomatoCount += 1
             self.setCompleteTomato(self.tomatoCount)
-            if self.tomatoCount % configData.longBreakPomodoroNumber == 0:
+            if self.tomatoCount % Config.longBreakPomodoroNumber == 0:
                 self.setStatus(self.ReadyToLoneBreak)
             else:
                 self.setStatus(self.ReadyToShortBreak)
@@ -72,20 +72,20 @@ class Main(MainWindow):
         self.lastStatue = self.status
         self.status = state
         if state == self.Run:
-            self.buttonMain.setText(self.tr('Reset'))
+            self.buttonMain.setText(self.s.strReset)
             self.timer.runTimer(self.nextTime)
         else:
             self.timer.stop()
 
             if state == self.ReadyToWork:
-                self.workView(self.tr('Work'))
-                self.nextTime = configData.workTime
+                self.workView(self.s.strWork)
+                self.nextTime = Config.workTime
             elif state == self.ReadyToShortBreak:
-                self.breakView(self.tr('Break'))
-                self.nextTime = configData.shortTime
+                self.breakView(self.s.strBreak)
+                self.nextTime = Config.shortTime
             elif state == self.ReadyToLoneBreak:
-                self.breakView(self.tr('Long Break'))
-                self.nextTime = configData.longTime
+                self.breakView(self.s.strLongBreak)
+                self.nextTime = Config.longTime
 
             self.viewTime(self.nextTime)
 
@@ -129,7 +129,7 @@ class MyTimer(QTimer):
 
 
 def main():
-    global configData
+    global Config
     global EXE_Flag
     global AppIcon
 
@@ -143,18 +143,18 @@ def main():
     else:
         AppIcon = QIcon('Resource/tomato.ico')
 
-    configData = ConfigData()
+    Config = ConfigData()
 
     # Language
-    print('Language: ' + configData.lang)
+    print('Language: ' + Config.lang)
     trans = QTranslator()
-    trans.load('i18n/'+configData.lang+'.qm')
+    trans.load('i18n/' + Config.lang + '.qm')
     if not app.installTranslator(trans):
         print('Failed to load translator file!')
 
-    mainWindow = Main()
-    mainWindow.setWorkStatus()
-    mainWindow.show()
+    m = MainCtrl()
+    m.setWorkStatus()
+    m.show()
 
     sys.exit(app.exec_())
 

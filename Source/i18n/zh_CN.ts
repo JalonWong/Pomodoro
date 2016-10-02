@@ -2,56 +2,51 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>MainWindow</name>
+    <name>Strings</name>
     <message>
-        <location filename="main.py" line="177"/>
+        <location filename="Strings.py" line="11"/>
         <source>Work</source>
         <translation>工作</translation>
     </message>
     <message>
-        <location filename="main.py" line="180"/>
+        <location filename="Strings.py" line="12"/>
         <source>Break</source>
         <translation>休息</translation>
     </message>
     <message>
-        <location filename="main.py" line="183"/>
+        <location filename="Strings.py" line="13"/>
         <source>Long Break</source>
         <translation>长休息</translation>
     </message>
     <message>
-        <location filename="main.py" line="44"/>
+        <location filename="Strings.py" line="14"/>
         <source>Decrease a Pomodoro</source>
         <translation>减少一个番茄</translation>
     </message>
     <message>
-        <location filename="main.py" line="84"/>
+        <location filename="Strings.py" line="15"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="main.py" line="51"/>
+        <location filename="Strings.py" line="16"/>
         <source>Show Window</source>
         <translation>显示窗口</translation>
     </message>
     <message>
-        <location filename="main.py" line="53"/>
+        <location filename="Strings.py" line="17"/>
         <source>Hide Window</source>
         <translation>隐藏窗口</translation>
     </message>
     <message>
-        <location filename="main.py" line="125"/>
-        <source>Complete</source>
-        <translation>完成</translation>
-    </message>
-    <message>
-        <location filename="main.py" line="165"/>
-        <source>Reset</source>
-        <translation>重置</translation>
-    </message>
-    <message>
-        <location filename="main.py" line="37"/>
+        <location filename="Strings.py" line="10"/>
         <source>Pomodoro</source>
         <translation>番茄钟</translation>
+    </message>
+    <message>
+        <location filename="Strings.py" line="18"/>
+        <source>Reset</source>
+        <translation>停止</translation>
     </message>
 </context>
 </TS>
