@@ -105,26 +105,20 @@ class MyTimer(QTimer):
 
     def __init__(self, parent):
         super().__init__(parent)
-        self.setInterval(100)
+        self.setInterval(1000)
         self.timeout.connect(self.onTick)
         self.fullTime = 0
-        self.startTime = 0
-        self.lastTime = 0
 
     def onTick(self):
-        current_time = time.perf_counter()
-        view_time = self.fullTime - (current_time - self.startTime)
-        if view_time <= 0:
+        self.fullTime -= 1
+        if self.fullTime <= 0:
             self.stop()
             self.fullTimeout.emit()
-        elif int(view_time) != self.lastTime:
-            self.lastTime = int(view_time)
-            self.update.emit(self.lastTime)
+        else:
+            self.update.emit(self.fullTime)
 
     def runTimer(self, full_time):
         self.fullTime = full_time
-        self.startTime = time.perf_counter()
-        self.lastTime = 0
         super().start()
 
 
