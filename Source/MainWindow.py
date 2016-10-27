@@ -93,8 +93,11 @@ class MainWindow(QWidget, Ui_Form):
         self.buttonMain.setFocus()
 
     def keyPressEvent(self, QKeyEvent):
-        if QKeyEvent.key() == QtCore.Qt.Key_Escape:
+        key = QKeyEvent.key()
+        if key == QtCore.Qt.Key_Escape:
             self.hide()
+        elif key == QtCore.Qt.Key_Enter or key == QtCore.Qt.Key_Return:
+            self.buttonMain.click()
         else:
             super().keyPressEvent(QKeyEvent)
 
