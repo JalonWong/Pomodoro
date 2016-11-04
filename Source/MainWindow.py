@@ -1,8 +1,10 @@
 # coding=utf-8
 from PyQt5 import uic, QtCore
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QCursor
 from ui_main import Ui_Form
 import i18n.Strings as Strings
+import webbrowser
 
 qtUIFile = "main.ui"
 
@@ -12,12 +14,12 @@ class MainWindow(QWidget, Ui_Form):
         super().__init__()
         self.s = Strings.Strings()
 
-        self.status = ''
-        self.lastStatue = ''
-
         self.tomatoCount = 0
         self.isPyUI = is_pyui
         self.icon = icon
+
+        self.version = '1.0'
+        self.TrayText = '{0} {1}\n'.format(self.s.strPomodoro, self.version)
 
         # Object Init
         if self.isPyUI:
@@ -31,18 +33,23 @@ class MainWindow(QWidget, Ui_Form):
         self.setWindowTitle(self.s.strPomodoro)
         self.title = self.windowTitle()
 
+        self.showAction = QAction(self.s.strShowWindow, self)
+        self.showAction.triggered.connect(self.showWindow)
+        self.hideAction = QAction(self.s.strHideWindow, self)
+        self.hideAction.triggered.connect(self.hide)
+        self.aboutAction = QAction(self.s.strAbout + '...', self)
+        self.aboutAction.triggered.connect(lambda: webbrowser.open_new_tab('https://github.com/JalonWong/Pomodoro'))
+
         self.buttonMenu = QMenu()
         self.buttonMenu.addAction(self.s.strWork).triggered.connect(self.setWorkStatus)
         self.buttonMenu.addAction(self.s.strBreak).triggered.connect(self.setBreakStatus)
         self.buttonMenu.addAction(self.s.strLongBreak).triggered.connect(self.setLoneBreakStatus)
         self.buttonMenu.addAction(self.s.strDecreasePomodoro).triggered.connect(self.decreaseOneTomato)
+        self.buttonMenu.addAction(self.aboutAction)
         self.buttonMenu.addSeparator()
         self.buttonMenu.addAction(self.s.strExit).triggered.connect(self.close)
+        self.buttonMain.customContextMenuRequested.connect(lambda: self.buttonMenu.exec(QCursor.pos()))
 
-        self.showAction = QAction(self.s.strShowWindow, self)
-        self.showAction.triggered.connect(self.showWindow)
-        self.hideAction = QAction(self.s.strHideWindow, self)
-        self.hideAction.triggered.connect(self.hide)
         self.buildTray()
 
     def close(self):
@@ -60,16 +67,20 @@ class MainWindow(QWidget, Ui_Form):
     def buildTray(self):
         self.trayIcon = QSystemTrayIcon(self)
         self.trayIcon.setIcon(self.icon)
-        self.trayIcon.setToolTip(self.s.strPomodoro)
+        self.trayIcon.setToolTip(self.TrayText)
         self.trayIcon.activated.connect(self.onTrayActivated)
         self.trayIcon.show()
 
         menu = QMenu()
         menu.addAction(self.showAction)
         menu.addAction(self.hideAction)
+        menu.addAction(self.aboutAction)
         menu.addSeparator()
         menu.addAction(self.s.strExit).triggered.connect(self.close)
         self.trayIcon.setContextMenu(menu)
+
+    def setTrayToolTipText(self, text):
+        self.trayIcon.setToolTip(self.TrayText + text)
 
     def onTrayActivated(self, reason):
         if reason == QSystemTrayIcon.DoubleClick:

@@ -5,7 +5,7 @@ import time
 import ctypes
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon, QCursor
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QTranslator, QFileInfo, QTimer
 from MyConfig import *
 from MainWindow import MainWindow
@@ -28,23 +28,19 @@ class MainCtrl(MainWindow):
     def __init__(self):
         super().__init__(AppIcon, EXE_Flag)
         self.nextTime = 0
+        self.nextTipText = ''
         self.status = self.ReadyToWork
         self.lastStatue = self.ReadyToWork
         self.timer = MyTimer(self)
         self.timer.update.connect(self.viewTime)
         self.timer.fullTimeout.connect(self.timeout)
 
-        self.buttonMain.customContextMenuRequested.connect(self.menuRequested)
         self.buttonMain.clicked.connect(self.mainClicked)
 
     def close(self):
         self.timer.stop()
         super().close()
         print('exit')
-
-    def menuRequested(self):
-        if self.status != self.Run:
-            self.buttonMenu.exec(QCursor.pos())
 
     def mainClicked(self):
         if self.status != self.Run:
@@ -74,17 +70,22 @@ class MainCtrl(MainWindow):
         if state == self.Run:
             self.buttonMain.setText(self.s.strReset)
             self.timer.runTimer(self.nextTime)
+            self.setTrayToolTipText(self.nextTipText)
         else:
             self.timer.stop()
+            self.setTrayToolTipText(self.s.strStop)
 
             if state == self.ReadyToWork:
                 self.workView(self.s.strWork)
+                self.nextTipText = self.s.strWork
                 self.nextTime = Config.workTime
             elif state == self.ReadyToShortBreak:
                 self.breakView(self.s.strBreak)
+                self.nextTipText = self.s.strBreak
                 self.nextTime = Config.shortTime
             elif state == self.ReadyToLoneBreak:
                 self.breakView(self.s.strLongBreak)
+                self.nextTipText = self.s.strLongBreak
                 self.nextTime = Config.longTime
 
             self.viewTime(self.nextTime)

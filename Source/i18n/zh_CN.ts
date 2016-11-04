@@ -48,5 +48,15 @@
         <source>Reset</source>
         <translation>停止</translation>
     </message>
+    <message>
+        <location filename="Strings.py" line="19"/>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <location filename="Strings.py" line="20"/>
+        <source>About</source>
+        <translation>关于</translation>
+    </message>
 </context>
 </TS>

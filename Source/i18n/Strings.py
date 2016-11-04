@@ -16,6 +16,8 @@ class Strings(QObject):
         self.strShowWindow = self.tr('Show Window')
         self.strHideWindow = self.tr('Hide Window')
         self.strReset = self.tr('Reset')
+        self.strStop =  self.tr('Stop')
+        self.strAbout = self.tr('About')
 
 
 def GetStrings():
