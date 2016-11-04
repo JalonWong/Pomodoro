@@ -1,5 +1,7 @@
 # Pomodoro
-用 PyQt5 编写的番茄钟工具
+用 PyQt5 编写的番茄钟工具。
+
+在 [Release](https://github.com/JalonWong/Pomodoro/releases) 中下载最新的可执行文件。
 
 # 开发
 须安装：
