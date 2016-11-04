@@ -1,5 +1,6 @@
 # coding=utf-8
 import sys
+import os
 import platform
 import time
 import ctypes
@@ -123,6 +124,24 @@ class MyTimer(QTimer):
         super().start()
 
 
+def GetDataPath(package, resource):
+    p = os.path.join(package, resource)
+    if os.path.exists(p):
+        print(p)
+        return p
+
+    try:
+        d = os.path.dirname(sys.modules[package].__file__)
+        p = os.path.join(d, resource)
+        if os.path.exists(p):
+            print(p)
+            return p
+    except AttributeError:
+        pass
+    
+    return None
+
+
 def main():
     global Config
     global EXE_Flag
@@ -142,9 +161,9 @@ def main():
 
     # Language
     print('Language: ' + Config.lang)
+    file_path = GetDataPath('i18n', Config.lang + '.qm')
     trans = QTranslator()
-    trans.load('i18n/' + Config.lang + '.qm')
-    if not app.installTranslator(trans):
+    if not file_path or not trans.load(file_path) or not app.installTranslator(trans):
         print('Failed to load translator file!')
 
     m = MainCtrl()
