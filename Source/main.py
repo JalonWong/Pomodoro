@@ -27,7 +27,8 @@ class MainCtrl(MainWindow):
     ReadyToLoneBreak = 3
 
     def __init__(self):
-        super().__init__(AppIcon, EXE_Flag)
+        global Config
+        super().__init__(AppIcon, EXE_Flag, Config.staysOnTop)
         self.nextTime = 0
         self.nextTipText = ''
         self.status = self.ReadyToWork

@@ -19,6 +19,8 @@ class ConfigData(object):
         self.longTime = int(float(self.getValue('DEFAULT', 'LongBreakTime', '15')) * 60)
         self.longBreakPomodoroNumber = int(self.getValue('DEFAULT', 'PomodoroForLongBreak', '4'))
 
+        self.staysOnTop = self.getValue('UI', 'StaysOnTop', 'True').lower() == 'true'
+
         file = open(filename, 'w')
         self.config.write(file)
         file.close()
@@ -27,7 +29,11 @@ class ConfigData(object):
         #     print(key)
 
     def getValue(self, section, key, default_value):
+        if not section in self.config:
+            self.config.add_section(section)
+        
         s = self.config[section]
+
         if key in s:
             return s[key]
         else:

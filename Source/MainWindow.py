@@ -10,7 +10,7 @@ qtUIFile = "main.ui"
 
 
 class MainWindow(QWidget, Ui_Form):
-    def __init__(self, icon, is_pyui=False):
+    def __init__(self, icon, is_pyui=False, stays_on_top=True):
         super().__init__()
         self.s = Strings.Strings()
 
@@ -18,8 +18,8 @@ class MainWindow(QWidget, Ui_Form):
         self.isPyUI = is_pyui
         self.icon = icon
 
-        self.version = '1.0'
-        self.TrayText = '{0} {1}\n'.format(self.s.strPomodoro, self.version)
+        self.version = '1.0.1'
+        self.TrayText = '{0} v{1}\n'.format(self.s.strPomodoro, self.version)
 
         # Object Init
         if self.isPyUI:
@@ -51,6 +51,9 @@ class MainWindow(QWidget, Ui_Form):
         self.buttonMain.customContextMenuRequested.connect(lambda: self.buttonMenu.exec(QCursor.pos()))
 
         self.buildTray()
+
+        if stays_on_top:
+            self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def close(self):
         self.closeEnable = True
@@ -97,9 +100,7 @@ class MainWindow(QWidget, Ui_Form):
             self.hide()
 
     def showWindow(self):
-        # mainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.show()
-        self.setWindowState(QtCore.Qt.WindowActive)
         self.activateWindow()
         self.buttonMain.setFocus()
 
