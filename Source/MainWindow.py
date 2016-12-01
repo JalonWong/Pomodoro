@@ -115,12 +115,22 @@ class MainWindow(QWidget, Ui_Form):
 
     def workView(self, s):
         self.buttonMain.setText(s)
-        self.buttonMain.setStyleSheet('background:rgb(235, 97, 97)')
+        self.buttonMain.setStyleSheet(
+            'QPushButton{background:rgb(235, 97, 97);color:lightgrey}'
+            'QPushButton:focus{background:rgb(235, 97, 97);color:black}'
+            'QPushButton:hover{background:rgb(237, 114, 114)}'
+            'QPushButton:pressed{background:rgb(234, 85, 85)}'
+        )
         # self.buttonMain.setStyleSheet('background:rgb(218, 101, 101)')
 
     def breakView(self, s):
         self.buttonMain.setText(s)
-        self.buttonMain.setStyleSheet('background:rgb(0, 175, 108)')
+        self.buttonMain.setStyleSheet(
+            'QPushButton{background:rgb(0, 175, 108);color:lightgrey}'
+            'QPushButton:focus{background:rgb(0, 175, 108);color:black}'
+            'QPushButton:hover{background:rgb(0, 191, 120)}'
+            'QPushButton:pressed{background:rgb(0, 159, 100)}'
+        )
         # self.buttonMain.setStyleSheet('background:rgb(131, 218, 101)')
 
     def setCompleteTomato(self, count):
