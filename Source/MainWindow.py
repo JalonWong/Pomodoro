@@ -53,7 +53,8 @@ class MainWindow(QWidget, Ui_Form):
         self.buildTray()
 
         if stays_on_top:
-            self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+            flags = self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint
+            self.setWindowFlags(flags)
 
     def close(self):
         self.closeEnable = True
@@ -100,9 +101,11 @@ class MainWindow(QWidget, Ui_Form):
             self.hide()
 
     def showWindow(self):
-        self.show()
-        self.activateWindow()
-        self.buttonMain.setFocus()
+        if self.buttonMain.hasFocus():
+            return
+        elif not self.isHidden():
+            self.showMinimized()
+        self.showNormal()
 
     def keyPressEvent(self, QKeyEvent):
         key = QKeyEvent.key()
