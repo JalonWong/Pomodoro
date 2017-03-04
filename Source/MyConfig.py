@@ -9,7 +9,7 @@ class ConfigData(object):
 
         self.config = configparser.ConfigParser()
         filename = 'config.ini'
-        self.config.read(filename)
+        self.config.read(filename, encoding='utf-8')
 
         self.lang = QLocale.system().name()
         self.lang = self.getValue('DEFAULT', 'Language', self.lang)
@@ -21,9 +21,8 @@ class ConfigData(object):
 
         self.staysOnTop = self.getValue('UI', 'StaysOnTop', 'True').lower() == 'true'
 
-        file = open(filename, 'w')
-        self.config.write(file)
-        file.close()
+        with open(filename, 'w', encoding='utf-8') as file:
+            self.config.write(file)
 
         # for key in self.config['DEFAULT']:
         #     print(key)
