@@ -18,7 +18,7 @@ class MainWindow(QWidget, Ui_Form):
         self.isPyUI = is_pyui
         self.icon = icon
 
-        self.version = '1.0.1'
+        self.version = '1.0.2'
         self.TrayText = '{0} v{1}\n'.format(self.s.strPomodoro, self.version)
 
         # Object Init
