@@ -1,7 +1,7 @@
 # Pomodoro
 用 PyQt5 编写的番茄钟工具。
 
-![ui](./source/resource/ui.png)
+![ui](./Source/Resource/ui.png)
 
 在 [Release](../../releases) 中下载最新的可执行文件。
 
