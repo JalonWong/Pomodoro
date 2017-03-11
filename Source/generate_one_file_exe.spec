@@ -3,7 +3,7 @@
 block_cipher = None
 
 a = Analysis(['main.py'],
-             pathex=['D:\\work\\Projects\\Python\\Pomodoro\\Source'],
+             pathex=['.'],
              binaries=None,
              datas=[('i18n/*.qm', 'i18n')],
              hiddenimports=[],
